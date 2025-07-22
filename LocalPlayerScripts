@@ -987,6 +987,91 @@ MainTab:Toggle({
     end
 })
 
+-- Customization Tab
+local CustomizationTab = Window:Tab({
+    Title = "Customization",
+    Icon = "palette",
+    Locked = false,
+})
+
+local CustomizationSection = CustomizationTab:Section({
+    Title = "Script Appearance",
+    TextXAlignment = "Left",
+    TextSize = 17,
+})
+
+local colorOptions = {
+    { Name = "Sea Blue", Hex = "#4682B4" },
+    { Name = "Red", Hex = "#FF3333" },
+    { Name = "Green", Hex = "#33CC33" },
+    { Name = "Purple", Hex = "#9933CC" },
+    { Name = "Orange", Hex = "#FF8C00" },
+}
+
+-- Define themes for each color, setting multiple properties
+for _, color in ipairs(colorOptions) do
+    pcall(function()
+        WindUI:AddTheme({
+            Name = "Dark_" .. color.Name:gsub(" ", "_"),
+            Accent = color.Hex,
+            Dialog = color.Hex, -- Apply to dialogs
+            Outline = color.Hex, -- Apply to borders
+            Text = "#FFFFFF",
+            Placeholder = "#999999",
+            Background = "#0e0e10",
+            Button = color.Hex, -- Apply to buttons
+            Icon = color.Hex, -- Apply to icons
+        })
+    end)
+end
+
+local function getColorNames()
+    local names = {}
+    for _, color in ipairs(colorOptions) do
+        table.insert(names, color.Name)
+    end
+    return names
+end
+
+local selectedColor = "Sea Blue"
+CustomizationTab:Dropdown({
+    Title = "Theme Color",
+    Values = getColorNames(),
+    Value = selectedColor,
+    Multi = false,
+    AllowNone = false,
+    Callback = function(value)
+        selectedColor = value
+        pcall(function()
+            local themeName = "Dark_" .. value:gsub(" ", "_")
+            WindUI:SetTheme(themeName)
+            WindUI:Notify({
+                Title = "Theme Updated",
+                Content = "Changed to " .. value .. " theme! Applied to buttons, icons, borders, and dialogs.",
+                Duration = 5,
+            })
+        end)
+    end
+})
+
+CustomizationTab:Toggle({
+    Title = "Window Transparency",
+    Icon = "eye",
+    Type = "Checkbox",
+    Default = true,
+    Callback = function(state)
+        pcall(function()
+            Window:ToggleTransparency(state)
+            WindUI:Notify({
+                Title = "Transparency Updated",
+                Content = state and "Transparency enabled" or "Transparency disabled",
+                Duration = 5,
+            })
+        end)
+    end
+})
+
+
 
 
 updateESP()
