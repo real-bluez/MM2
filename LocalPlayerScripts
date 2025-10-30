@@ -1,3 +1,10 @@
+if game.PlaceId == 142823291 or game.GameId == 142823291 then
+	warn("Correct Game Loading...")
+else
+	game:GetService("Players").LocalPlayer:Kick("This script is designed to Run On MM2")
+end
+
+local TpScript = "https://raw.githubusercontent.com/real-bluez/MM2/refs/heads/main/LocalPlayerScripts"
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
 local Players = game:GetService("Players")
 local Plr = Players.LocalPlayer
@@ -127,17 +134,69 @@ RoundEndFade.OnClientEvent:Connect(function()
 	farming = false
 end)
 
+-- Get Map
+
+local function GetMap()
+	for _, map in ipairs(game.Workspace:GetChildren()) do
+		if map:GetAttribute("MapID") ~= nil then
+			return map.Name
+		end
+	end
+	return nil
+end
+
+RoundStart.OnClientEvent:Connect(GetMap)
+
 WindUI:AddTheme({
-	Name = "My Theme", -- theme name
+	Name = "Halloween", -- theme name
 
 	Accent = Color3.fromHex("#271700"),
-	Dialog = Color3.fromHex("#161616"),
+	Dialog = Color3.fromHex("#3f2400"),
 	Outline = Color3.fromHex("#FFFFFF"),
 	Text = Color3.fromHex("#FFFFFF"),
 	Placeholder = Color3.fromHex("#7a7a7a"),
 	Background = Color3.fromHex("#3f2400"),
 	Button = Color3.fromHex("#52525b"),
 	Icon = Color3.fromHex("#ff9100"),
+})
+
+WindUI:AddTheme({
+	Name = "Crimson", -- theme name
+
+	Accent = Color3.fromHex("#271700"),
+	Dialog = Color3.fromHex("#2b0000"),
+	Outline = Color3.fromHex("#FFFFFF"),
+	Text = Color3.fromHex("#FFFFFF"),
+	Placeholder = Color3.fromHex("#7a7a7a"),
+	Background = Color3.fromHex("#2b0000"),
+	Button = Color3.fromHex("#52525b"),
+	Icon = Color3.fromHex("#b82500"),
+})
+
+WindUI:AddTheme({
+	Name = "Ocean", -- theme name
+
+	Accent = Color3.fromHex("#271700"),
+	Dialog = Color3.fromHex("#002c41"),
+	Outline = Color3.fromHex("#FFFFFF"),
+	Text = Color3.fromHex("#FFFFFF"),
+	Placeholder = Color3.fromHex("#7a7a7a"),
+	Background = Color3.fromHex("#002c41"),
+	Button = Color3.fromHex("#52525b"),
+	Icon = Color3.fromHex("#0077ff"),
+})
+
+WindUI:AddTheme({
+	Name = "Dark", -- theme name
+
+	Accent = Color3.fromHex("#18181b"),
+	Dialog = Color3.fromHex("#161616"),
+	Outline = Color3.fromHex("#FFFFFF"),
+	Text = Color3.fromHex("#FFFFFF"),
+	Placeholder = Color3.fromHex("#7a7a7a"),
+	Background = Color3.fromHex("#101010"),
+	Button = Color3.fromHex("#52525b"),
+	Icon = Color3.fromHex("#a1a1aa"),
 })
 
 local Window = WindUI:CreateWindow({
@@ -148,13 +207,13 @@ local Window = WindUI:CreateWindow({
 	Size = UDim2.fromOffset(580, 460),
 	MinSize = Vector2.new(560, 350),
 	MaxSize = Vector2.new(850, 560),
-	Transparent = false,
+	Transparent = true,
 	Theme = "Dark",
 	Resizable = true,
 	SideBarWidth = 200,
 	BackgroundImageTransparency = 0.42,
-	HideSearchBar = true,
-	ScrollBarEnabled = false,
+	HideSearchBar = false,
+	ScrollBarEnabled = true,
 
 	User = {
 		Enabled = true,
@@ -163,19 +222,34 @@ local Window = WindUI:CreateWindow({
 	},
 })
 
-Window:Tag({
-	Title = "Halloween Updated 🎃",
-	Color = Color3.fromHex("#ff7300"),
-	Radius = 8,
+Window:EditOpenButton({
+	Title = "Open Button",
+	Icon = "monitor",
+	CornerRadius = UDim.new(0, 16),
+	StrokeThickness = 2,
+	Color = ColorSequence.new( -- gradient
+		Color3.fromHex("#a75900"),
+		Color3.fromHex("#ffb52b")
+	),
+	OnlyMobile = false,
+	Enabled = true,
+	Draggable = true,
 })
 
 Window:Tag({
-	Title = "V 2.3",
-	Color = Color3.fromHex("#ff7300"),
+	Title = "V 2.5",
+	Color = Color3.fromHex("#b66d00"),
 	Radius = 8,
 })
 
-WindUI:SetTheme("My Theme")
+WindUI:SetTheme("Halloween")
+
+Window:CreateTopbarButton("DarkMode", "moon", function()
+	WindUI:SetTheme("Dark")
+end, 990)
+Window:CreateTopbarButton("Event", "candy", function()
+	WindUI:SetTheme("Halloween")
+end, 990)
 
 local Section = Window:Section({
 	Title = "Main",
@@ -351,6 +425,25 @@ local Slider = Tab:Slider({
 	end,
 })
 
+
+local Toggle = Tab:Toggle({
+	Title = "Enable Shot Murderer Button",
+	Desc = "Spawns a button to shot murderer.",
+	Icon = "check",
+	Type = "Checkbox",
+	Default = false,
+	Callback = function(state)
+		button = state
+		local TargetPos = Players.BuilderGirls00.Character:FindFirstChild("HumanoidRootPart").position
+		local RemoteFunction = Players.LocalPlayer.Character.Gun.KnifeLocal.CreateBeam.RemoteFunction
+		if state then
+			RemoteFunction:InvokeServer(1, TargetPos, "AH2")
+		else
+			button = false
+		end
+	end,
+})
+
 local Section = Window:Section({
 	Title = "Farms",
 	Icon = "bitcoin",
@@ -362,6 +455,15 @@ local Tab = Section:Tab({
 	Icon = "settings",
 	Locked = false,
 })
+
+local Paragraph = Tab:Paragraph({
+	Title = "Instructions!",
+	Desc = "We limited speed to 22, because of recent reviews saying that anticheat kicks them if above, so please understand us.",
+	Color = "Orange",
+	Locked = false,
+})
+
+Tab:Divider()
 
 local Dropdown = Tab:Dropdown({
 	Title = "Farm Type",
@@ -377,9 +479,9 @@ local Slider = Tab:Slider({
 	Step = 1,
 
 	Value = {
-		Min = 10,
-		Max = 30,
-		Default = 15,
+		Min = 5,
+		Max = 22,
+		Default = 20,
 	},
 	Callback = function(value)
 		auto_farm_speed = value
@@ -416,6 +518,125 @@ local Toggle = Tab:Toggle({
 				Icon = "x",
 			})
 		end
+	end,
+})
+
+local Section = Window:Section({
+	Title = "Optimization",
+	Icon = "hard-drive",
+	Opened = false,
+})
+
+local Tab = Section:Tab({
+	Title = "Low Optimization Mode",
+	Icon = "turtle",
+	Locked = false,
+})
+
+local Paragraph = Tab:Paragraph({
+	Title = "Information!",
+	Desc = "This mode disable shadows and lows roblox graphics.",
+	Color = "Orange",
+	Locked = false,
+})
+
+Tab:Divider()
+
+local Button = Tab:Button({
+	Title = "Enable Low Optimization Mode",
+	Desc = "Enables Low Optimization Mode (For High-End Devices)",
+	Locked = false,
+	Callback = function()
+		local Target = game.Workspace:GetDescendants()
+
+		local function DisableShadows()
+			for _, niga in ipairs(Target) do
+				if niga:IsA("BasePart") then
+					niga.CastShadow = false
+				end
+			end
+		end
+		DisableShadows()
+		RoundStart.OnClientEvent:Connect(DisableShadows)
+	end,
+})
+
+local Tab = Section:Tab({
+	Title = "Mid Optimization Mode",
+	Icon = "cat",
+	Locked = false,
+})
+
+local Paragraph = Tab:Paragraph({
+	Title = "Information!",
+	Desc = "This mode disable shadows, removes some textures and removes VFX.",
+	Color = "Orange",
+	Locked = false,
+})
+
+Tab:Divider()
+
+local Button = Tab:Button({
+	Title = "Enable Mid Optimization Mode",
+	Desc = "Enables Mid Optimization Mode (For low-Mid Devices)",
+	Locked = false,
+	Callback = function()
+		local Target = game.Workspace:GetDescendants()
+
+		local function DisableShadowsAndVFX()
+			for _, niga in ipairs(Target) do
+				if niga:IsA("BasePart") then
+					niga.CastShadow = false
+				elseif niga:IsA("ParticleEmitter") then
+					niga:Remove()
+				end
+			end
+		end
+		DisableShadowsAndVFX()
+		RoundStart.OnClientEvent:Connect(DisableShadowsAndVFX)
+	end,
+})
+
+local Tab = Section:Tab({
+	Title = "Ultra Optimization Mode",
+	Icon = "fish",
+	Locked = false,
+})
+
+local Paragraph = Tab:Paragraph({
+	Title = "Information!",
+	Desc = "This mode disable shadows and removes all textures and set graphic mode to 1.",
+	Color = "Orange",
+	Locked = false,
+})
+
+Tab:Divider()
+
+local Button = Tab:Button({
+	Title = "Enable Ultra Optimization Mode",
+	Desc = "Enables Ultra Optimization Mode (For potato Devices)",
+	Locked = false,
+	Callback = function()
+		settings().Rendering.QualityLevel = 1
+		local Target = game.Workspace:GetDescendants()
+
+		local function DisableShadowsAndVFXAndTexture()
+			for _, niga in ipairs(Target) do
+				if niga:IsA("BasePart") then
+					niga.CastShadow = false
+				elseif niga:IsA("ParticleEmitter") then
+					niga:Destroy()
+				elseif niga:IsA("Texture") then
+					niga:Destroy()
+				elseif niga:IsA("Decal") then
+					niga:Destroy()
+				elseif niga:IsA("PointLight") then
+					niga:Destroy()
+				end
+			end
+		end
+		DisableShadowsAndVFXAndTexture()
+		RoundStart.OnClientEvent:Connect(DisableShadowsAndVFXAndTexture)
 	end,
 })
 
@@ -736,13 +957,13 @@ local Button = Tab:Button({
 	Callback = function()
 		for _, Player in ipairs(Players:GetPlayers()) do
 			if Player.Backpack:FindFirstChild("Knife") then
-				chat("The murderer is: ".. Player.Name)
+				chat("The murderer is: " .. Player.Name)
 			elseif Player.Character:FindFirstChild("Knife") then
-				chat("The murderer is: ".. Player.Name)
+				chat("The murderer is: " .. Player.Name)
 			elseif Player.Backpack:FindFirstChild("Gun") then
-				chat("The sherrif is: ".. Player.Name)
+				chat("The sherrif is: " .. Player.Name)
 			elseif Player.Character:FindFirstChild("Gun") then
-				chat("The sherrif is: ".. Player.Name)
+				chat("The sherrif is: " .. Player.Name)
 			end
 		end
 	end,
@@ -756,7 +977,7 @@ local Section = Window:Section({
 
 local Tab = Section:Tab({
 	Title = "Main Spawner",
-	Icon = "terminal", 
+	Icon = "terminal",
 	Locked = false,
 })
 
@@ -789,9 +1010,12 @@ local Button = Tab:Button({
 		local itemName = Input.Value
 		if itemName and itemName ~= "" then
 			local replicatedStorage = game:GetService("ReplicatedStorage")
-			local boxController = replicatedStorage:WaitForChild("Remotes"):WaitForChild("Shop"):WaitForChild("BoxController")
+			local boxController =
+				replicatedStorage:WaitForChild("Remotes"):WaitForChild("Shop"):WaitForChild("BoxController")
 			boxController:Fire("KnifeBox4", itemName)
-			local DataBase, PlayerData = require(game:GetService("ReplicatedStorage").Database.Sync.Item), require(game:GetService("ReplicatedStorage").Modules.ProfileData)
+			local DataBase, PlayerData =
+				require(game:GetService("ReplicatedStorage").Database.Sync.Item),
+				require(game:GetService("ReplicatedStorage").Modules.ProfileData)
 			local PlayerWeapons = PlayerData.Weapons
 			local quantityToAdd = 1
 			local inventory = {}
@@ -877,5 +1101,79 @@ local Keybind = Tab:Keybind({
 	Value = "G",
 	Callback = function(v)
 		Window:SetToggleKey(Enum.KeyCode[v])
+	end,
+})
+
+Tab:Divider()
+
+local Button = Tab:Button({
+	Title = "Copy Job Id!",
+	Desc = "Copy Your Job Id so some can join you!",
+	Locked = false,
+	Callback = function()
+		local Job = game.JobId
+		setclipboard(Job)
+	end,
+})
+
+local Input = Tab:Input({
+	Title = "Join With Job Id!",
+	Desc = "Joins with someone else jobid!",
+	Value = nil,
+	InputIcon = "bird",
+	Type = "Input",
+	Placeholder = "Enter Job Id...",
+	Callback = function(input) end,
+})
+
+local Button = Tab:Button({
+	Title = "Join!",
+	Desc = "Join The jobid added above!",
+	Locked = false,
+	Callback = function()
+		game:GetService("TeleportService")
+			:TeleportToPlaceInstance("142823291", Tab.Input.input, game.Players.LocalPlayer)
+	end,
+})
+
+Tab:Divider()
+
+local Button = Tab:Button({
+	Title = "Rejoin!",
+	Desc = "Rejoin your current server in case of bug's!",
+	Locked = false,
+	Callback = function()
+		game:GetService("TeleportService"):TeleportToPlaceInstance("142823291", game.JobId, game.Players.LocalPlayer)
+	end,
+})
+
+local Tab = Window:Tab({
+	Title = "Themes",
+	Icon = "paintbrush",
+	Locked = false,
+})
+
+local Dropdown = Tab:Dropdown({
+	Title = "Select Theme",
+	Desc = "Select Gui Theme",
+	Values = { "Halloween", "Crimson", "Ocean", "Dark" },
+	Value = "Halloween",
+	Callback = function(option)
+		WindUI:SetTheme(option)
+	end,
+})
+
+local Toggle = Tab:Toggle({
+	Title = "Gui Transparency",
+	Desc = "Enable/Disable Gui Transparency",
+	Icon = "search",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			Window:ToggleTransparency(true)
+		else
+			Window:ToggleTransparency(false)
+		end
 	end,
 })
